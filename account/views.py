@@ -4,7 +4,7 @@ from rest_framework.authtoken.views \
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .serializers import RegistrationSerializer,\
-    LoginSerializer
+    LoginSerializer, ActivationSerializer
 
 
 
@@ -17,6 +17,21 @@ class RegistrationView(APIView):
         serializer.save()
         return Response('Аккаунт успешно создан',
                         status=201)
+
+
+class ActivationView(APIView):
+    def post(self, request):
+        serializer = ActivationSerializer(
+            data=request.data)
+        serializer.is_valid(
+            raise_exception=True)
+        serializer.activate()
+        return Response(
+            'Аккаунт успешно активирован', status=200
+        )
+
+
+
 
 
 class LoginView(ObtainAuthToken):

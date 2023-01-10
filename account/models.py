@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models\
     import AbstractBaseUser, BaseUserManager
+from django.utils.crypto import get_random_string
 
 
 class UserManager(BaseUserManager):
@@ -19,7 +20,7 @@ class UserManager(BaseUserManager):
 
     def create_user(self, email, password,
                     **extra_fields):
-        extra_fields.setdefault('is_active', True)
+        # extra_fields.setdefault('is_active', True)
         return self._create(email, password,
                             **extra_fields)
 
@@ -43,6 +44,9 @@ class User(AbstractBaseUser):
     is_staff = models.BooleanField(
         default=False
     )
+    activation_code = models.CharField(
+        max_length=20, blank=True
+    )
 
     objects = UserManager()
 
@@ -51,6 +55,11 @@ class User(AbstractBaseUser):
 
     def __str__(self):
         return self.email
+
+    def create_activation_code(self):
+        code = get_random_string(10)
+        self.activation_code=code
+        self.save()
 
 
 

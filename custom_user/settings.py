@@ -87,6 +87,11 @@ DATABASES = {
         'PORT': 5432
     }
 }
+# git init
+# git add .
+# git commit -m ''
+# git remote add origin SSH
+# git push origin master
 
 
 # Password validation
