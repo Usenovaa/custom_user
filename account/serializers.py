@@ -70,8 +70,6 @@ class ActivationSerializer(
         user.save()
 
 
-
-
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField(required=True)
     password = serializers.CharField(required=True)
@@ -105,5 +103,28 @@ class LoginSerializer(serializers.Serializer):
             )
         data['user'] = user
         return data
+
+
+class ChangePasswordSerializer(
+    serializers.Serializer):
+    old_password = serializers.CharField(
+        min_length=4, required=True
+    )
+    new_password = serializers.CharField(
+        min_length=4, required=True
+    )
+    new_password_confirm = serializers.CharField(
+        min_length=4, required=True
+    )
+
+    def validate_old_password(self, old_pass):
+        request = self.context.get('request')
+        user = request.user
+
+        if not user.check_password(old_pass):
+            raise serializers.ValidationError(
+                'Введите корректный пароль'
+            )
+
 
 

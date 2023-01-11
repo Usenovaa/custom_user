@@ -80,18 +80,14 @@ WSGI_APPLICATION = 'custom_user.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'db',
-        'USER': 'user',
-        'PASSWORD': 'password',
+        'NAME': 'custom_user',
+        'USER': 'hello',
+        'PASSWORD': '1',
         'HOST': 'localhost',
         'PORT': 5432
     }
 }
-# git init
-# git add .
-# git commit -m ''
-# git remote add origin SSH
-# git push origin master
+
 
 
 # Password validation
@@ -140,3 +136,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'usenovatest@gmail.com'
+EMAIL_HOST_PASSWORD = 'cawpiwxyuejzbthc'

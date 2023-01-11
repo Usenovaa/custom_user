@@ -3,9 +3,12 @@ from rest_framework.authtoken.views \
     import ObtainAuthToken
 from rest_framework.response import Response
 from rest_framework.views import APIView
+
+from .permissions import IsActivePermission
 from .serializers import RegistrationSerializer,\
     LoginSerializer, ActivationSerializer
-
+from rest_framework.authtoken.models import Token
+from rest_framework.permissions import IsAuthenticated
 
 
 class RegistrationView(APIView):
@@ -31,9 +34,30 @@ class ActivationView(APIView):
         )
 
 
-
-
-
 class LoginView(ObtainAuthToken):
     serializer_class = LoginSerializer
+
+class LogoutView(APIView):
+    permission_classes = [IsActivePermission]
+    def post(self, request):
+        user = request.user
+        Token.objects.filter(user=user).delete()
+        return Response(
+            'вы вышли со своего аккайнта'
+        )
+
+
+class ChangePasswordView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        serializer = ChangePasswordSerializer(
+            data=request.data
+        )
+
+
+
+
+
+
 
