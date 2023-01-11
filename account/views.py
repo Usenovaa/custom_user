@@ -5,8 +5,8 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .permissions import IsActivePermission
-from .serializers import RegistrationSerializer,\
-    LoginSerializer, ActivationSerializer
+from .serializers import RegistrationSerializer, \
+    LoginSerializer, ActivationSerializer, ChangePasswordSerializer, ForgotPasswordSerializer
 from rest_framework.authtoken.models import Token
 from rest_framework.permissions import IsAuthenticated
 
@@ -52,8 +52,32 @@ class ChangePasswordView(APIView):
 
     def post(self, request):
         serializer = ChangePasswordSerializer(
-            data=request.data
+            data=request.data,
+            context={'request': request}
         )
+        if serializer.is_valid(raise_exception=True):
+            serializer.set_new_password()
+            return Response(
+                'Status: 200. пароль успешно обновлен'
+            )
+
+
+class ForgotPasswordView(APIView):
+    def post(self, request):
+        serializer = ForgotPasswordSerializer(
+            data = request.data
+        )
+        if serializer.is_valid(raise_exception=True):
+            serializer.send_verification_email()
+            return Response(
+                'Вам выслали сообщение для восстановления'
+            )
+
+
+class ForgotPasswordCompleteView(APIView):
+    def post(self, request):
+        serializer = ForgotPasswordCompleteSerializer(
+            data=request.data)
 
 
 
