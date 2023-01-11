@@ -177,7 +177,7 @@ class ForgotPasswordSerializer(serializers.Serializer):
         )
 
 
-class ForgotPasswordCompleteSerilizer(serializers.Serializer):
+class ForgotPasswordCompleteSerializer(serializers.Serializer):
     code = serializers.CharField(required=True)
     email = serializers.EmailField(required=True)
     password = serializers.CharField(
@@ -205,6 +205,13 @@ class ForgotPasswordCompleteSerilizer(serializers.Serializer):
 
         return attrs
 
+    def set_new_password(self):
+        email = self.validated_data.get('email')
+        password = self.validated_data.get('password')
+        user = User.objects.get(email=email)
+        user.set_password(password)
+        user.activation_code = ''
+        user.save()
 
 
 
